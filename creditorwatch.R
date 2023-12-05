@@ -18,7 +18,7 @@ latest_date <- max(df$date)
 # Cross join to get records associated with each relevant month for annual subscriptions
 annual <- df[df$itemDescription == "annual subscription",] %>% 
   cross_join(data.frame(rank = seq(0,12))) %>% 
-  mutate(date = add_with_rollback(date,months(rank)),
+  mutate(date = ceiling_date(add_with_rollback(date,months(rank)),"months")-1,
          amount = amount/12,
          itemDescription = "Monthly Recurring Revenue") %>% 
   filter(rank != 0) %>% 
